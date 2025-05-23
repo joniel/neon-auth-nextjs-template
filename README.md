@@ -42,6 +42,8 @@ This is a [Next.js](https://nextjs.org) project using the App Router that server
    DATABASE_URL=              # neondb_owner role connection
    ```
 
+   > If you're using the [Neon native integration on Vercel](https://vercel.com/marketplace/neon), the integration automatically sets these environment variables for you in Vercel when you connect a Vercel project to a Neon database. [Learn more](https://neon.tech/docs/guides/vercel-native-integration#environment-variables-set-by-the-integration).
+
 3. Run the development server:
 
    ```bash
