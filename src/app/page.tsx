@@ -1,14 +1,40 @@
 import { Header } from '@/app/header';
-import { TodoForm } from '@/components/TodoForm';
+import List from '@/components/List';
+import TodoForm from '@/components/TodoForm';
+import { TodoPage } from '@/components/TodoPage';
+import { stackServerApp } from '@/stack';
 import Image from 'next/image';
+import { getAllTodos } from './actions';
 
-export default function Home() {
+export default async function Home() {
+
+
+  const user = await stackServerApp.getUser();
+
+  const initialTodos = user ? await getAllTodos() : [];
+
+  // user 객체에서 필요한 데이터만 추출 (서버 메서드 제외)
+  const userData = user ? {
+    id: user.id,
+    displayName: user.displayName,
+    primaryEmail: user.primaryEmail,
+  } : null;
+
   return (
-    <div className="grid grid-rows-[auto_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)] relative mx-auto lg:max-w-none">
+    <div className="min-h-screen flex flex-col items-center justify-center py-8 px-4 bg-gray-100 dark:bg-gray-900">
+
       <Header />
 
+      {user ? (
+        <TodoPage initialTodos={initialTodos} userData={userData} />
+      ) : (
+      <div className="text-center text-gray-700 dark:text-gray-300">
+        로그인하세요
+      </div>
+      )}
 
-      <TodoForm />
+
+
       {/* 
       <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start relative z-10">
         

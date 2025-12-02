@@ -1,6 +1,6 @@
 // src/components/TodoForm.tsx
 
-'use client'; 
+'use client';
 
 import { createTodoAction } from '@/actions/todo'; // 👈 서버 액션을 임포트
 import { useRef } from 'react';
@@ -16,9 +16,13 @@ function SubmitButton() {
   );
 }
 
-export function TodoForm() {
+export default function TodoForm({ onAdd, userData }: { 
+  onAdd?: (newTodo: { id: number; title: string; completed: boolean }) => void; 
+  userData: { id: string; displayName: string | null; primaryEmail: string | null } | null;
+}) {
   const formRef = useRef<HTMLFormElement>(null);
 
+  
   // 폼이 제출된 후 실행될 함수
   const handleSuccess = async (formData: FormData) => {
     // 폼 데이터를 서버 액션으로 전달하고 결과를 받습니다.
@@ -28,6 +32,12 @@ export function TodoForm() {
       console.log('Todo 저장 성공:', result.todo);
       formRef.current?.reset(); // 폼 초기화
       // 사용자에게 성공 메시지 표시
+      // alert('할 일이 성공적으로 저장되었습니다!');
+
+      // 새로운 할 일이 추가되었음을 부모 컴포넌트에 알립니다.
+      if (onAdd && result.todo) {
+        onAdd(result.todo);
+      }
     } else {
       alert(`저장 실패: ${result.message}`);
     }
